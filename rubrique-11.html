@@ -1,0 +1,99 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html dir="#LANG_DIR" lang="#LANG">
+<head>
+<title>[(#NOM_SITE_SPIP|textebrut)]</title>
+[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+<INCLURE{fond=inc-head}>
+<meta name="robots" content="noindex,follow"/>
+</head>
+
+<body>
+<div id="page">
+
+	<INCLURE{fond=inc-entete}{self=#SELF}>
+
+	<div id="conteneur">
+
+      <INCLURE{fond=menu}>
+
+		<div id="contenu">
+		
+                <?php if( ! $auteur_session  && _request('statut') == 'poubelle') { ?>
+                    #REQUIRE_HTTPS
+                    #LOGIN_PUBLIC
+                <?php } else { ?>
+
+                #SET{statut,(#ENV**{statut}|?{#ENV**{statut},'publie'})}
+		          #SET{statut_a,(#ENV**{statut}|=={'prop'}|?{#ARRAY{0,accepte,1,prop},#ENV*{statut}})}
+
+                [(#GET{statut}|=={prop}|?{<h2 class="titre-principal"><img src="[(#CHEMIN{images/puce-orange.png})]" alt=""/>Événements en attente de modération</h2>})]
+                [(#GET{statut}|=={refuse}|?{<h2 class="titre-principal"><img src="[(#CHEMIN{images/puce-rouge.png})]" alt=""/>Événements refusés</h2>})]
+                [(#GET{statut}|=={debat}|?{<h2 class="titre-principal"><img src="[(#CHEMIN{images/puce-violette.png})]" alt=""/>Événements débattus</h2>})]
+                [(#GET{statut}|=={publie}|?{<h2 class="titre-principal"><img src="[(#CHEMIN{images/puce-verte.png})]" alt=""/>Événements acceptés</h2>})]
+                [(#GET{statut}|=={poubelle}|?{<h2 class="titre-principal"><img src="[(#CHEMIN{images/puce-blanche.png})]" alt=""/>Articles corbeillés</h2>})]
+
+
+                <ul class='liste-up'>
+                [(#REM) <li><a href="">Passés</a></li> ]
+                [(#REM) <li><a href="">À venir</a></li> ]
+                &nbsp;
+                </ul>
+                <ul class='liste-down'>
+                <li [(#GET{statut}|=={publie}|?{class="on",''})]><a href="[(#SELF|parametre_url{'statut',publie})]">acceptés</a></li>
+                <li [(#GET{statut}|=={prop}|?{class="on",''})]><a href="[(#SELF|parametre_url{'statut',prop})]">non modérés</a></li>
+                <li [(#GET{statut}|=={debat}|?{class="on",''})]><a href="[(#SELF|parametre_url{'statut',debat})]">débattus</a></li>
+                <li [(#GET{statut}|=={refuse}|?{class="on",''})]><a href="[(#SELF|parametre_url{'statut',refuse})]">refusés</a></li>
+                <?php if( $auteur_session) { ?>
+                <li [(#GET{statut}|=={poubelle}|?{class="on",''})]><a href="[(#SELF|parametre_url{'statut',poubelle})]">corbeille</a></li>
+                <?php } ?>
+                </ul>
+                <br class="nettoyeur" />
+
+                [(#REM) Cette boucle affiche la liste des articles en fonction du statut des articles de SPIP]
+
+                <BOUCLE_evenements(RUBRIQUES) {titre_mot=agenda}>
+
+                [(#REM) tentative pour positioner à la date courante dans la liste. Marche pô. Du coup, on affiche que les articles à venir.]
+                <BOUCLE_m(ARTICLES) {branche} {statut=#GET{statut}} {par date} {age > 60}></BOUCLE_m>
+#SET{debut_article,#ENV{debut_article,#TOTAL_BOUCLE}}
+                <//B_m>
+
+
+                <B_article>
+                [(#ANCRE_PAGINATION)]
+
+                <div class="liste-evenements">
+                <div class="pagination">#PAGINATION{page_precedent_suivant}</div>
+
+                <dl>
+                <BOUCLE_article(ARTICLES) {branche} {statut IN #GET{statut_a}} {par date_redac} {pagination 15} {age_redac<=0}>
+                [<dt class="date">[(#DATE_REDAC|nom_jour)] (#DATE_REDAC|affdate{'Y-m-d'}|unique{liste_evt}|jour) [(#DATE_REDAC|nom_mois)]</dt>]
+                <dd>
+                <INCLURE {fond=inc-liste-evenement} {id_article} {statut}>
+                </dd>
+                </BOUCLE_article>
+                </dl>
+
+                    <div class="pagination">#PAGINATION{page_precedent_suivant}</div>
+                </div>
+                </B_article>
+                <p>Aucun.</p>
+                <//B_article>
+                </BOUCLE_evenements>
+
+                <br class="nettoyeur" />
+            <?php } ?>
+
+            </div><!-- fin contenu -->
+
+        </div> <!-- fin conteneur -->
+
+        [(#REM) Pied de page ]
+        <INCLURE{fond=inc-pied}{skel=#SQUELETTE}>
+
+    </div><!-- fin page -->
+</body>
+                </html>
+

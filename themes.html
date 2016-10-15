@@ -1,0 +1,43 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-force-https}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html dir="#LANG_DIR" xmlns="http://www.w3.org/1999/xhtml" lang="#LANG">
+<head>
+<title>[(#NOM_SITE_SPIP|textebrut)]</title>
+[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+<INCLURE{fond=inc-head}>
+</head>
+
+<body class="page_sommaire">
+<div id="page">
+
+	<INCLURE{fond=inc-entete}{self=#SELF}>
+
+	<div id="conteneur">
+
+	<INCLURE{fond=menu}>
+
+   <div id="contenu">
+
+      <h2 class="titre-principal">Thèmes</h2>
+
+      <B_themes>
+      <ul>
+      <BOUCLE_themes(MOTS){type=Themes}>
+      <li><a href="#URL_MOT">#TITRE</li>
+      </BOUCLE_themes>
+      </ul>
+      </B_themes>
+
+
+
+   </div><!-- fin contenu -->
+
+   </div> <!-- fin conteneur -->
+
+		[(#REM) Pied de page ]
+      <INCLURE{fond=inc-pied}>
+
+</div><!-- fin page -->
+</body>
+</html>

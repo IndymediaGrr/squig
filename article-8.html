@@ -1,0 +1,50 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<BOUCLE_article(ARTICLES) {id_article} {statut IN publie}>
+<BOUCLE_poubs(ARTICLES) {id_article} {statut IN debat,prop,publie,refuse,accepte,poubelle}>
+<?php if( ! $auteur_session )
+{ 
+header('Location: ./');
+exit();
+} ?>
+</BOUCLE_poubs>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="#LANG_DIR" lang="#LANG">
+	<head>
+            <title>[(#TITRE|textebrut)] - [(#NOM_SITE_SPIP|textebrut)]</title>
+		[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+		<INCLURE{fond=inc-head}>
+        
+                <INCLURE{fond=inc-head_robots} {id_article} {statut}>
+
+	</head>
+	<body>
+		<div id="page">
+			<INCLURE{fond=inc-entete}{self=#SELF}>
+
+			<div id="conteneur">
+
+				<INCLURE{fond=menu}>
+
+				<div id="contenu" class="deuxcolonnes">
+
+                    <div class="edito">
+                        #ANCRE_PAGINATION [(#REM) L'ancre qui permet de revenir en haut de la page quand on clique sur précédent ou suivant dans la pagination]
+                        <div [(#COMPTEUR_BOUCLE|=={1}|?{id="first"})] class="cartouche">
+                            <h3 class="#EDIT{titre} titre">[(#TITRE|supprimer_numero)]</h3>
+                            <p class="date">écrit le [(#DATE|affdate{d/m/Y})][(#DATE_MODIF|!={#DATE}|?{', actualisé le '[(#DATE_MODIF|affdate{d/m/Y})]})]</p>
+                        </div>
+                        [<div class="#EDIT{texte} texte">(#TEXTE)</div>]
+
+                        <div class="nettoyeur"></div>
+				</div><!-- fin contenu -->
+
+         </div> <!-- fin conteneur -->
+
+			[(#REM) Pied de page ]
+			<INCLURE{fond=inc-pied}{skel=#SQUELETTE}>
+
+		</div><!-- fin page -->
+	</body>
+</html>
+</BOUCLE_article>

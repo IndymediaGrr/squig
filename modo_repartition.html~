@@ -1,0 +1,153 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html dir="#LANG_DIR" lang="#LANG">
+<head>
+<title>[(#NOM_SITE_SPIP|textebrut)]</title>
+[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+<INCLURE{fond=inc-head}>
+</head>
+
+<body class="page_rubrique">
+<div id="page">
+
+	<INCLURE{fond=inc-entete}{self=#SELF}>
+
+	<div id="conteneur">
+
+		<INCLURE{fond=menu}>
+
+		<div id="contenu"  class="deuxcolonnes">
+
+<?php if ($auteur_session) { ?>
+
+
+<h2 class="titre-principal">Répartition des contributions</h2>
+
+<ul>
+<BOUCLE_ruba(RUBRIQUES){titre=Articles}>
+<BOUCLE_n2art_prop(ARTICLES){id_rubrique}{statut IN prop}></BOUCLE_n2art_prop>#SET{n2art_prop,#TOTAL_BOUCLE}<//B_n2art_prop>
+<BOUCLE_n2art_publie(ARTICLES){id_rubrique}{statut IN publie} ></BOUCLE_n2art_publie>#SET{n2art_publie,#TOTAL_BOUCLE}<//B_n2art_publie>
+<BOUCLE_n2art_debat(ARTICLES){id_rubrique}{statut IN debat}></BOUCLE_n2art_debat>#SET{n2art_debat,#TOTAL_BOUCLE}<//B_n2art_debat>
+<BOUCLE_n2art_accepte(ARTICLES){id_rubrique}{statut IN accepte}></BOUCLE_n2art_accepte>#SET{n2art_accepte,#TOTAL_BOUCLE}<//B_n2art_accepte>
+<BOUCLE_n2art_refuse(ARTICLES){id_rubrique}{statut IN refuse}></BOUCLE_n2art_refuse>#SET{n2art_refuse,#TOTAL_BOUCLE}<//B_n2art_refuse>
+<BOUCLE_n2art_poubelle(ARTICLES){id_rubrique}{statut IN poubelle}></BOUCLE_n2art_poubelle>#SET{n2art_poubelle,#TOTAL_BOUCLE}<//B_n2art_poubelle>
+<BOUCLE_p2art(ARTICLES){id_rubrique}{statut IN prop,publie,debat,accepte,poubelle,refuse}{titre_mot !IN 'Non classé'}></BOUCLE_p2art>#SET{p2art,#TOTAL_BOUCLE}<//B_p2art>
+#SET{n2art,(#GET{n2art_prop}|plus{#GET{n2art_publie}}|plus{#GET{n2art_debat}}|plus{#GET{n2art_accepte}}|plus{#GET{n2art_poubelle}}|plus{#GET{n2art_refuse}})}
+
+<li>#GET{n2art}&nbsp;articles dont #GET{p2art}&nbsp;sont classés
+<ul>
+   <li>#GET{n2art_prop}&nbsp;proposés</li>
+   <li>#GET{n2art_accepte}&nbsp;acceptés une fois</li>
+   <li>#GET{n2art_debat}&nbsp;débattus</li>
+   <li>#GET{n2art_poubelle}&nbsp;corbeillés</li>
+   <li>#GET{n2art_refuse}&nbsp;refusés</li>
+   <li>#GET{n2art_publie}&nbsp;publiés</li>
+   </ul>
+</li>
+</BOUCLE_ruba>
+
+<BOUCLE_rube(RUBRIQUES){titre=Agenda}>
+<BOUCLE_n2evt_prop(ARTICLES){id_rubrique}{statut IN prop}></BOUCLE_n2evt_prop>#SET{n2evt_prop,#TOTAL_BOUCLE}<//B_n2evt_prop>
+<BOUCLE_n2evt_publie(ARTICLES){id_rubrique}{statut IN publie}></BOUCLE_n2evt_publie>#SET{n2evt_publie,#TOTAL_BOUCLE}<//B_n2evt_publie>
+<BOUCLE_n2evt_debat(ARTICLES){id_rubrique}{statut IN debat}></BOUCLE_n2evt_debat>#SET{n2evt_debat,#TOTAL_BOUCLE}<//B_n2evt_debat>
+<BOUCLE_n2evt_accepte(ARTICLES){id_rubrique}{statut IN accepte}></BOUCLE_n2evt_accepte>#SET{n2evt_accepte,#TOTAL_BOUCLE}<//B_n2evt_accepte>
+<BOUCLE_n2evt_refuse(ARTICLES){id_rubrique}{statut IN refuse}></BOUCLE_n2evt_refuse>#SET{n2evt_refuse,#TOTAL_BOUCLE}<//B_n2evt_refuse>
+<BOUCLE_n2evt_poubelle(ARTICLES){id_rubrique}{statut IN poubelle}></BOUCLE_n2evt_poubelle>#SET{n2evt_poubelle,#TOTAL_BOUCLE}<//B_n2evt_poubelle>
+#SET{n2evt,(#GET{n2evt_prop}|plus{#GET{n2evt_publie}}|plus{#GET{n2evt_debat}}|plus{#GET{n2evt_accepte}}|plus{#GET{n2evt_poubelle}}|plus{#GET{n2evt_refuse}})}
+<li>#GET{n2evt}&nbsp;événements
+<ul>
+   <li>#GET{n2evt_prop}&nbsp;proposés</li>
+   <li>#GET{n2evt_accepte}&nbsp;acceptés une fois</li>
+   <li>#GET{n2evt_debat}&nbsp;débattus</li>
+   <li>#GET{n2evt_poubelle}&nbsp;corbeillés</li>
+   <li>#GET{n2evt_refuse}&nbsp;refusés</li>
+   <li>#GET{n2evt_publie}&nbsp;publiés</li>
+</ul>
+</li>
+
+</BOUCLE_rube>
+
+<BOUCLE_n2cmp_prop(FORUMS){id_rubrique}{statut IN prop,debat}></BOUCLE_n2cmp_prop>#SET{n2cmp_prop,#TOTAL_BOUCLE}<//B_n2cmp_prop>
+<BOUCLE_n2cmp_publie(FORUMS){id_rubrique}{statut IN publie}></BOUCLE_n2cmp_publie>#SET{n2cmp_publie,#TOTAL_BOUCLE}<//B_n2cmp_publie>
+<BOUCLE_n2cmp_refuse(FORUMS){id_rubrique}{statut IN refuse,poubelle}></BOUCLE_n2cmp_refuse>#SET{n2cmp_refuse,#TOTAL_BOUCLE}<//B_n2cmp_refuse>
+#SET{n2cmp,(#GET{n2cmp_prop}|plus{#GET{n2cmp_publie}}|plus{#GET{n2cmp_refuse}})}
+<li>#GET{n2cmp}&nbsp;compléments d'information.</li>
+<ul>
+   <li>#GET{n2cmp_prop}&nbsp;proposés</li>
+   <li>#GET{n2cmp_refuse}&nbsp;refusés</li>
+   <li>#GET{n2cmp_publie}&nbsp;publiés</li>
+</ul>
+</li>
+</ul>
+
+
+
+
+<BOUCLE_rub(RUBRIQUES){titre=Articles}>
+<h2 class="titre-principal">Articles par portée</h2>
+
+<BOUCLE_nartb(ARTICLES){id_rubrique}{statut IN prop,publie,debat,accepte,poubelle,refuse}{titre_mot !IN 'Non classé'}></BOUCLE_nartb>#SET{nartb,#TOTAL_BOUCLE}<//B_nartb>
+
+<BOUCLE_motsb(MOTS){type=portees}>
+<BOUCLE_partb(ARTICLES){id_rubrique}{id_mot}{statut IN prop,publie,debat,accepte,poubelle,refuse}{titre_mot !IN 'Non classé'}></BOUCLE_partb>
+#SET{partb,#TOTAL_BOUCLE}
+#SET{pb,(#GET{partb}|mult{125}|div{#GET{nartb}})}
+<div style="clear:both;width:28em;float:right;position:relative;">
+<div style="float:left;width:#GET{pb}%;background:black;color:#888;font-weight:bold;padding:0.5em 0;text-align:center;"></div><//B_partb>
+</div>
+&nbsp; #TITRE [#GET{partb}]<br/>
+</BOUCLE_motsb>
+
+
+
+<h2 class="titre-principal">Articles par thème</h2>
+
+<BOUCLE_nart(ARTICLES){id_rubrique}{statut IN prop,publie,debat,accepte,poubelle,refuse}{titre_mot !IN 'Non classé'}></BOUCLE_nart>#SET{nart,#TOTAL_BOUCLE}<//B_nart>
+
+<BOUCLE_mots(MOTS){type=themes}{titre !IN 'Non classé'}>
+<BOUCLE_part(ARTICLES){id_rubrique}{statut IN prop,publie,debat,accepte,poubelle,refuse}{id_mot}></BOUCLE_part>
+#SET{part,#TOTAL_BOUCLE}
+#SET{p,(#GET{part}|mult{125}|div{#GET{nart}})}
+<div style="clear:both;width:28em;float:right;position:relative;">
+<div style="float:left;width:#GET{p}%;background:black;color:#888;font-weight:bold;padding:0.5em 0;text-align:center;"></div><//B_part>
+</div>
+&nbsp; #TITRE [#GET{part}]<br/>
+</BOUCLE_mots>
+
+
+<h2 class="titre-principal">Articles locaux par thème</h2>
+
+<BOUCLE_bbnart(ARTICLES){id_rubrique}{statut IN prop,publie,debat,accepte,poubelle,refuse}{titre_mot !IN 'Non classé','Autres infos'}></BOUCLE_bbnart>#SET{nart,#TOTAL_BOUCLE}<//B_bbnart>
+
+<BOUCLE_bbmots(MOTS){type=themes}{titre!='Non classé'}>
+<BOUCLE_bbpart(ARTICLES){id_rubrique}{statut IN prop,publie,debat,accepte,poubelle,refuse}{id_mot}{titre_mot !IN 'Non classé','Autres infos'}></BOUCLE_bbpart>
+#SET{part,#TOTAL_BOUCLE}
+#SET{p,(#GET{part}|mult{100}|div{#GET{nart}})}
+<div style="clear:both;width:28em;float:right;position:relative;">
+<div style="float:left;width:#GET{p}%;background:black;color:#888;font-weight:bold;padding:0.5em 0;text-align:center;"></div><//B_bbpart>
+</div>
+&nbsp; #TITRE [#GET{part}]<br/>
+</BOUCLE_bbmots>
+
+
+
+
+</BOUCLE_rub>
+<?php } else { ?>
+
+<INCLURE{fond=inc-modo_reserve}>
+
+<?php } ?>
+
+     
+			<br class="nettoyeur" />
+		</div><!-- fin contenu -->
+		[(#REM) Pied de page ]
+		<INCLURE{fond=inc-pied}>
+		<br class="nettoyeur" />
+	</div> <!-- fin conteneur -->
+</div><!-- fin page -->
+</body>
+</html>
+

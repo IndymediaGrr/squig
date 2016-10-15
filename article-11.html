@@ -1,0 +1,205 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<BOUCLE_article(ARTICLES) {id_article} {statut IN debat,prop,publie,refuse,accepte,poubelle}>
+<BOUCLE_poubs(ARTICLES) {id_article} {statut IN poubelle}>
+<?php if( ! $auteur_session )
+{ 
+header('Location: ./');
+exit();
+} ?>
+</BOUCLE_poubs>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="#LANG_DIR" lang="#LANG">
+    <head>
+        <title>[(#NOM_SITE_SPIP|textebrut)]</title>
+        [<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+        <INCLURE{fond=inc-head}>
+        <INCLURE{fond=inc-head_robots} {id_article} {statut=statut}>
+        <link rel="stylesheet" href="[(#CHEMIN{agenda.css})]" type="text/css" media="all" />
+        <script type="text/javascript" src="#EVAL{_DIR_JAVASCRIPT}layer.js"> </script> 
+        <script type="text/javascript" src="#EVAL{_DIR_JAVASCRIPT}presentation.js"> </script> 
+    </head>
+
+    [(#REM) squelette pour un evenement ]
+
+    <body>
+        <div id="page">
+            <INCLURE{fond=inc-entete}{self=#SELF}>
+            <div id="conteneur">
+                <INCLURE{fond=menu}>
+                <div id="contenu" class="deuxcolonnes">
+                    <div class="evenement">
+                        [(#REM) cartouche]
+                        <div class="cartouche">
+                            <h2 class="titre-principal titre">#TITRE</h2>
+                            <p class="date-auteur"> 
+                            <B_auteur>
+                            <span class="auteurE"><BOUCLE_auteur(AUTEURS){id_article}>[par (#NOM|sinon{"anonyme"})]</BOUCLE_auteur></span>
+                            </B_auteur>
+                            <span class="auteurE">par anonyme</span>
+                            <//B_auteur>
+                            </p>
+                            
+                            <h4 class="date">[(#DATE_REDAC|nom_jour)] [(#DATE_REDAC|jour)] [(#DATE_REDAC|nom_mois)] [(#DATE_REDAC|annee)][(#DATE_REDAC|secondes|=={05}|?{', toute la journée',&nbsp;à [(#DATE_REDAC|heures)]:[(#DATE_REDAC|minutes)]})]</h4> 
+                            [<h4 class="lieu">(#SURTITRE)</h4>]
+
+                        </div>
+
+                        [(#REM) bloc de modération]
+                        <div class="moderation">
+                            <BOUCLE_div_prop(ARTICLES) {id_article} {statut=prop}>
+                            <div class="attention prop">
+                                <p class="attention-titre">Cet événement n'a pas été modéré.</p>
+                            </BOUCLE_div_prop>
+                            <BOUCLE_div_accepte(ARTICLES) {id_article} {statut=accepte}>
+                            <div class="attention prop">
+                                <p class="attention-titre">Cet événement a été accepté par un·e seul·e modérateureuse.</p>
+                            </BOUCLE_div_accepte>
+                            <BOUCLE_div_debat(ARTICLES) {id_article} {statut=debat}>
+                            <div class="attention debat">
+                                <p class="attention-titre">Cet événement est débattu :</p>
+                            </BOUCLE_div_debat>
+                            <BOUCLE_div_refuse(ARTICLES) {id_article} {statut=refuse}>
+                            <div class="attention refuse">
+                                <p class="attention-titre">Cet événement est refusé :</p>
+                            </BOUCLE_div_refuse>
+                            <BOUCLE_div_poubelle(ARTICLES) {id_article} {statut=poubelle}>
+                            <div class="attention poubelle">
+                                <p class="attention-titre">Cet événement est à la corbeille :</p>
+                            </BOUCLE_div_poubelle>
+
+                            <?php if(	$auteur_session ) { ?>
+
+                            <BOUCLE_div_publie(ARTICLES) {id_article} {statut=publie}>
+                            <div class="attention publie">
+                                <p class="attention-titre">Cet événement est accepté</p>
+                            </BOUCLE_div_publie>
+                            <p class="idart">Identifiant : #ID_ARTICLE</p>
+                            [(#MODE_CONTRIB{'evenement'})]
+                            <BOUCLE_div_publiefin(ARTICLES) {id_article} {statut=publie}>
+                            </div>
+                            </BOUCLE_div_publiefin>
+
+                            <?php } else { ?>
+
+                            <BOUCLE_div_comm(ARTICLES) {id_article} {statut IN prop,accepte,debat,refuse,poubelle}>
+                            [<div class="#EDIT{chapo} attention-commentaire">(#CHAPO)</div>]
+                            </BOUCLE_div_comm>
+ 
+                            <?php } ?>
+
+                            <BOUCLE_div_findiv(ARTICLES) {id_article} {statut IN prop,accepte,debat,refuse,poubelle}>
+                        </div>
+                        </BOUCLE_div_findiv>
+
+                    </div>
+
+
+                    [(#REM) texte de l'article]
+                    [<div class="texte">(#TEXTE|image_reduire{400,0})</div>]
+                    [<div class="texte">(#NOTES)</div>]
+
+                    [(#REM) information complémentaire sur le lieu]
+
+                    <BOUCLE_lieuinfo(MOTS){id_article}{type=lieux}>
+                    <B_lieuinfoart>
+                    <div class="lieu_connu">
+                        <BOUCLE_lieuinfoart(ARTICLES){id_mot}{id_rubrique=#LIEUX}>
+                        <p>#TITRE</p>
+                        <p>#TEXTE</p>
+                        </BOUCLE_lieuinfoart>
+                    </div>
+                    </B_lieuinfoart>
+                    </BOUCLE_lieuinfo>
+
+                    <br class="nettoyeur" />
+
+                    [(#REM) Autres documents joints a l'article ]
+                    <B_documents_joints>
+                    <div id="documents_joints">
+                        <h3><:titre_documents_joints:></h3>
+                        <ul>
+                            <BOUCLE_documents_joints(DOCUMENTS) {id_article} {par num titre, date} {doublons}>
+                            <li>
+                            <div class="spip_doc_titre"><a href="#URL_DOCUMENT" title="<:bouton_telecharger:>" type="#MIME_TYPE">[(#TITRE|sinon{<:info_document:>})]</a> <small>(#TYPE_DOCUMENT[ - (#TAILLE|taille_en_octets)])</small></div>
+                            [<div class="spip_doc_descriptif">(#DESCRIPTIF)</div>]
+                            </li>
+                            </BOUCLE_documents_joints>
+                        </ul>
+                    </div>
+                    </B_documents_joints>
+
+                    <br class="nettoyeur" />
+                </div><!-- fin article -->
+
+
+                [(#PARAMETRES_FORUM|?) Cette balise (invisible) provoque le recalcul du forum la premiere fois qu'un message est poste (cf. inc/invalideur). ]
+                <div class="complements">
+                    <B_complement>
+                    <div class="complements-titre">Compléments d'informations :</div>
+                    <BOUCLE_complement(FORUMS){id_article}{par date}{statut IN prop,refuse,publie}>
+
+                    <?php if( $auteur_session ) { ?>
+
+                    <div class="complement #STATUT">
+
+                        <div class="cartouche">
+                            <div class="titre"><a name="forum#_complement:ID_FORUM"></a>#_complement:TITRE </div>
+                            [<div class="auteur">par (#_complement:AUTEUR), </div>]
+                            [<div class="date">le (#DATE|affdate_jourcourt)</div>]
+
+                            [(#MODE_COMMENTAIRE{#ID_FORUM})]
+
+                        </div>
+                        [<div class="texte">(#_complement:TEXTE)</div>]
+                    </div>
+
+                    <?php } else { ?>
+                    <BOUCLE_complement_publiepub(FORUMS){id_forum}{statut=publie}>
+                    <div class="complement publie">
+                        <div class="cartouche">
+                            <div class="titre">#_complement:TITRE </div>
+                            [<div class="auteur">par (#_complement:AUTEUR), </div>]
+                            [<div class="date">le (#DATE|affdate_jourcourt)</div>]
+                        </div>
+                        [<div class="texte">(#_complement:TEXTE)</div>]
+                    </div>
+                    </BOUCLE_complement_publiepub>
+
+
+                    <?php } ?>
+                    </BOUCLE_complement>
+                </div>
+
+                <BOUCLE_aj_comp(ARTICLES) {id_article} {statut IN prop,publie,debat}>
+                <p>[<strong><a href="spip.php?page=post_complement&amp;(#PARAMETRES_FORUM)">Ajouter un complément d'information</a></strong>]</p>	
+                </BOUCLE_aj_comp>
+
+                <B_periode>
+                <div class="evt-calendrier-semaine">
+                    <h2>Le même jour</h2>
+
+                    <p>[(#DATE_REDAC|nom_jour)] [(#DATE_REDAC|jour)] [(#DATE_REDAC|nom_mois)] [(#DATE_REDAC|annee)]</p>
+                    <ul>
+                        <BOUCLE_periode(ARTICLES){id_rubrique}{agenda date_redac, periode, (#DATE_REDAC|annee), (#DATE_REDAC|mois), (#DATE_REDAC|jour), (#DATE_REDAC|annee), (#DATE_REDAC|mois), (#DATE_REDAC|jour)}{id_article!=#ID_ARTICLE}{par date_redac}{0, 100}>
+                        <li><a href="#URL_ARTICLE">[(#DATE_REDAC|secondes|!={05}|?{[(#DATE_REDAC|heures)]:[(#DATE_REDAC|minutes)],toute la journée})] - #TITRE</a></li>
+                        </BOUCLE_periode>
+                    </ul>
+                </div>
+                </B_periode>
+
+                <strong><a href="spip.php?page=agenda&type=mois[&annee=(#DATE_REDAC|annee)][&mois=(#DATE_REDAC|mois)]">Voir le calendrier</a></strong>
+
+                <br class="nettoyeur" />
+
+            </div><!-- fin contenu -->
+
+        </div> <!-- fin conteneur -->
+
+        [(#REM) Pied de page ]
+        <INCLURE{fond=inc-pied}{skel=#SQUELETTE}>
+
+    </div><!-- fin page -->
+    </body>
+</html>
+</BOUCLE_article>

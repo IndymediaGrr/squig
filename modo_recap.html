@@ -1,0 +1,87 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html dir="#LANG_DIR" lang="#LANG">
+<head>
+<title>[(#NOM_SITE_SPIP|textebrut)]</title>
+[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+<INCLURE{fond=inc-head}>
+</head>
+
+<body class="page_rubrique">
+<div id="page">
+
+	<INCLURE{fond=inc-entete}>
+
+	<div id="conteneur">
+
+		<INCLURE{fond=menu}>
+
+		<div id="contenu"  class="deuxcolonnes">
+
+<?php
+
+if (autoriser('ecrire')) {
+		  ?>
+<h2 class="titre-principal">Récapitulatif de modération</h2>
+
+<p>En attente :
+
+   <BOUCLE_bbarticles_prop(RUBRIQUES){titre_mot=articles}{0,1}>
+   <BOUCLE_bbc_prop(ARTICLES) {branche} {statut IN prop,accepte}></BOUCLE_bbc_prop>
+   [<a href="[(#URL_RUBRIQUE|parametre_url{statut,prop})]">(#TOTAL_BOUCLE) [(#TOTAL_BOUCLE|<={1}|?{article,articles})]</a>]
+   <//B_bbc_prop>
+   </BOUCLE_bbarticles_prop>
+
+   <BOUCLE_bbevenements_prop(RUBRIQUES){titre_mot=agenda}{0,1}>
+   <BOUCLE_bbe_prop(ARTICLES) {branche} {statut IN prop,accepte}></BOUCLE_bbe_prop>
+   [, <a href="spip.php?page=modo_evenements&amp;statut=prop">(#TOTAL_BOUCLE)  [(#TOTAL_BOUCLE|<={1}|?{événement,événements})]</a>]
+   <//B_bbe_prop>
+   </BOUCLE_bbevenements_prop>
+
+   <BOUCLE_bbci_prop(FORUMS) {statut=prop}></BOUCLE_bbci_prop>
+   [, <a href="spip.php?page=modo_complements&amp;statut=prop">(#TOTAL_BOUCLE) [(#TOTAL_BOUCLE|<={1}|?{complément,compléments})]</a>]
+   <//B_bbci_prop>
+</p>
+<p>À débattre : 
+
+   <BOUCLE_bbarticles_debat(RUBRIQUES){titre_mot=articles}{0,1}>
+   <BOUCLE_bbc_debat(ARTICLES) {branche} {statut=debat}></BOUCLE_bbc_debat>
+   [<a href="[(#URL_RUBRIQUE|parametre_url{statut,debat})]">(#TOTAL_BOUCLE) [(#TOTAL_BOUCLE|<={1}|?{article,articles})]</a>]
+   <//B_bbc_debat>
+   </BOUCLE_bbarticles_debat>
+
+
+   <BOUCLE_bbevenements_debat(RUBRIQUES){titre_mot=agenda}{0,1}>
+   <BOUCLE_bbe_debat(ARTICLES) {branche} {statut=debat}></BOUCLE_bbe_debat>
+   [, <a href="spip.php?page=modo_evenements&amp;statut=debat">(#TOTAL_BOUCLE)  [(#TOTAL_BOUCLE|<={1}|?{événement,événements})]</a>]
+   <//B_bbe_debat>
+   </BOUCLE_bbevenements_debat>
+</p>
+
+
+<br/>
+<h2>Historique de modération</h2>
+<div class="recap-modo">
+    <INCLURE{fond=inc-modo-logs}>
+</div>
+
+<?php } else { ?>
+
+<INCLURE{fond=inc-modo_reserve}{url=#SELF}>
+
+<?php } ?>
+
+     
+			<br class="nettoyeur" />
+		</div><!-- fin contenu -->
+		[(#REM) Pied de page ]
+		<INCLURE{fond=inc-pied}>
+		<br class="nettoyeur" />
+	</div> <!-- fin conteneur -->
+</div><!-- fin page -->
+</body>
+</html>
+
+
+

@@ -1,0 +1,120 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html dir="#LANG_DIR" lang="#LANG">
+<head>
+<title>[(#NOM_SITE_SPIP|textebrut)]</title>
+[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+<INCLURE{fond=inc-head}>
+</head>
+
+<body class="page_recherche">
+<div id="page">
+
+	<INCLURE{fond=inc-entete}{self=#SELF}>
+
+	<div id="conteneur">
+
+		<INCLURE{fond=menu}>
+
+		<div id="contenu"  class="deuxcolonnes">
+
+<?php if ($auteur_session) { ?>
+
+			<h2 class="titre-principal">Rechercher partout</h2>
+
+
+			<form class="form form_recherche" action="#SELF" method="GET">
+				<input type="hidden" name="page" value="modo_recherche"/>
+				<label for="recherche">Chaîne de recherche :</label>
+				<input class="champs" type="text" name="recherche" value="[(#ENV{recherche})]"/>
+				<input class="bouton" type="submit" value="ok"/>
+			</form>
+
+			<br/><br/>
+
+
+			[(#RECHERCHE|?{<h2><:resultats_recherche:></h2>})]
+
+
+			<div class="resultats">
+
+				[(#REM) Articles ]
+
+				<div class="liste-articles">
+				[(#RECHERCHE|?{<h3>Articles</h3>})]
+				<BOUCLE_articles(RUBRIQUES) {titre_mot=articles} {0,1}>
+
+				<B_article>
+					#ANCRE_PAGINATION
+					<ul>
+						<BOUCLE_article(ARTICLES) {branche} {statut IN prop,debat,refuse,publie} {recherche} {par points} {inverse} {pagination}>
+                  <li>
+                  <a href="#URL_ARTICLE" title="#CHAPO">
+                     <img src="#CHEMIN{images/puce-#STATUT.png}" alt="#STATUT"/> 
+                     <span class="titre">#TITRE</span>
+                     <span class="date">[(#DATE|nom_jour)] [(#DATE|jour)] [(#DATE|nom_mois)] [(#DATE|annee)]</span>
+                     <B_auteur>
+                     <span class="auteurE">par <BOUCLE_auteur(AUTEURS){id_article}>#NOM</BOUCLE_auteur></span>
+                     </B_auteur>
+                  </a>
+                  </li>
+						</BOUCLE_article>
+					</ul>
+					[<p class="pagination">(#PAGINATION)</p>]
+				</B_article>
+				[(#RECHERCHE|?{<p>Aucun article n'a été trouvé.</p>})]
+				<//B_article>
+
+				</BOUCLE_articles>
+				</div>
+
+
+				[(#REM) Evennements ]
+
+				<div class="liste-articles">
+				[(#RECHERCHE|?{<h3>Événements</h3>})]
+				<BOUCLE_evenements(RUBRIQUES) {titre_mot=agenda} {0,1}>
+				<B_event>
+					#ANCRE_PAGINATION
+					<ul>
+						<BOUCLE_event(ARTICLES) {branche} {statut IN prop,debat,refuse,publie} {recherche} {par points} {inverse} {pagination}>
+<li>
+                  <a href="#URL_ARTICLE" title="#CHAPO">
+                     <img src="#CHEMIN{images/puce-#STATUT.png}" alt="#STATUT"/> 
+                     <span class="titre">#TITRE</span>
+                     <span class="date">[(#DATE_REDAC|nom_jour)] [(#DATE_REDAC|jour)] [(#DATE_REDAC|nom_mois)] [(#DATE_REDAC|annee)]</span>
+                     <B_auteure>
+                     <span class="auteurE">par <BOUCLE_auteure(AUTEURS){id_article}>#NOM</BOUCLE_auteure></span>
+                     </B_auteure>
+                  </a>
+                  </li>
+
+                 						</BOUCLE_event>
+					</ul>
+					[<p class="pagination">(#PAGINATION)</p>]
+				</B_event>
+				[(#RECHERCHE|?{<p>Aucun événement n'a été trouvé.</p>})]
+				<//B_event>
+				</BOUCLE_evenements>
+				</div>
+
+			</div>
+
+			<br class="nettoyeur" />
+			
+<?php } else { ?>
+
+<INCLURE{fond=inc-modo_reserve}>
+
+<?php } ?>
+
+
+		</div><!-- fin contenu -->
+		[(#REM) Pied de page ]
+		<INCLURE{fond=inc-pied}>
+		<br class="nettoyeur" />
+	</div> <!-- fin conteneur -->
+</div><!-- fin page -->
+</body>
+</html>

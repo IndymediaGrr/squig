@@ -1,0 +1,5 @@
+#CACHE{5*60}
+<div class="calendrier calendrier-semaine">
+<BOUCLE_semaine(ARTICLES){id_rubrique=11}{agenda date_redac, semaine, #ENV{annee}, #ENV{mois}, #ENV{jour}}{par date_redac}
+>[(#DATE_REDAC|squig_agenda_memo{#TITRE,#TITRE,#URL_ARTICLE})]</BOUCLE_semaine>[(#TOTAL_BOUCLE|squig_agenda_affiche{pas d'événement, 'semaine'})]<//B_semaine>
+</div>

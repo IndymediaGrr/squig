@@ -1,0 +1,77 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html dir="#LANG_DIR" lang="#LANG">
+<head>
+<title>[(#NOM_SITE_SPIP|textebrut)]</title>
+[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+<INCLURE{fond=inc-head}>
+<meta name="robots" content="noindex,follow"/>
+</head>
+
+<body>
+<div id="page">
+
+	<INCLURE{fond=inc-entete}{self=#SELF}>
+
+	<div id="conteneur">
+
+		<INCLURE{fond=menu}>
+
+		<div id="contenu">
+
+
+<?php  if (autoriser('modifier','article')) {
+
+		  //($auteur_session) {
+		  ?>
+
+			[(#ENV*{statut}|=={prop}|?{<h2 class="titre-principal">Compléments en attente de modération</h2>})]
+			[(#ENV*{statut}|=={refuse}|?{<h2 class="titre-principal">Compléments refusés</h2>})]
+			[(#ENV*{statut}|=={publie}|?{<h2 class="titre-principal">Compléments acceptés</h2>})]
+			
+			
+			[(#REM) Cette boucle affiche la liste des complements en fonction du statut des articles de SPIP]
+			
+				<B_comple>
+				#ANCRE_PAGINATION
+				<div class="liste-complements">
+				[(#REM) La pagination n'est possible que si l'on ne fait qu'une seule boucle d'articles. Elle est donc pour l'insant seulement faite sur tous les articles de la rubrique 4 (complements) ]
+				<ul>
+				<BOUCLE_comple(FORUMS) {par date} {inverse} {statut=#ENV*{statut}} {pagination 20}>
+				<li>
+					<a href="#URL_FORUM">
+						<h3 class="titre">#TITRE</h3>
+                  <BOUCLE_cart(ARTICLES){id_article=#ID_ARTICLE}{statut IN debat,prop,publie,refuse,accepte}><span class="titre-article">#TITRE</span></BOUCLE_cart>
+						<span class="date">[(#DATE|nom_jour)] [(#DATE|jour)] [(#DATE|nom_mois)] [(#DATE|annee)]</span>
+						[<span class="auteurE">par (#NOM)</span>]
+					</a>
+				</li>
+				</BOUCLE_comple>
+				</ul>
+				<div class="pagination">#PAGINATION{page_precedent_suivant}</div>
+				</div>
+				</B_comple>
+				<p>Aucune complément d'information.</p>
+				<//B_comple>
+			
+<?php } else { ?>
+
+<INCLURE{fond=inc-modo_reserve}>
+
+<?php } ?>
+
+	
+	<br class="nettoyeur" />
+			
+		</div><!-- fin contenu -->
+
+	[(#REM) Pied de page ]
+	<INCLURE{fond=inc-pied}{skel=#SQUELETTE}>
+        
+	</div> <!-- fin conteneur -->
+
+</div><!-- fin page -->
+</body>
+</html>
+

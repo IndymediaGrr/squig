@@ -1,0 +1,60 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="#LANG_DIR" lang="#LANG">
+<head>
+<title>[(#NOM_SITE_SPIP|textebrut)]</title>
+[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|textebrut)" />]
+<INCLURE{fond=inc-head}>
+<meta name="robots" content="index,follow"/>
+</head>
+
+
+<body>
+    <div id="page">
+
+        <INCLURE{fond=inc-entete}{self=#SELF}>
+
+        <div id="conteneur">
+
+            <INCLURE{fond=menu}>
+
+            <div id="contenu"  class="deuxcolonnes">
+               
+                <INCLURE{fond=inc-info_ig}>
+
+                [(#REM) Liste des éditos ]
+
+                <BOUCLE_rub_edito(RUBRIQUES) {titre_mot=editos}>
+                <B_editos>
+                <div class="liste-editos">
+                    <BOUCLE_editos(ARTICLES) {id_rubrique} {par num titre} {inverse} {pagination 5}>
+                    <div class="edito">
+                        #ANCRE_PAGINATION [(#REM) L'ancre qui permet de revenir en haut de la page quand on clique sur précédent ou suivant dans la pagination]
+                        <div [(#COMPTEUR_BOUCLE|=={1}|?{id="first"})] class="cartouche">
+                            <h3 class="#EDIT{titre} titre">[(#TITRE|supprimer_numero)]</h3>
+                            <p class="date">écrit le [(#DATE|affdate{d/m/Y})][(#DATE_MODIF|!={#DATE}|?{', actualisé le '[(#DATE_MODIF|affdate{d/m/Y})]})]</p>
+                        </div>
+                        [<div class="#EDIT{texte} texte">(#TEXTE)</div>]
+
+                        <div class="nettoyeur"></div>
+                    </div>
+                    </BOUCLE_editos>
+
+                    <div class="pagination">#PAGINATION{page_precedent_suivant}</div>
+                </div>
+                </B_editos>
+                </BOUCLE_rub_edito>
+
+                <br class="nettoyeur" />
+
+            </div><!-- fin contenu -->
+
+        </div> <!-- fin conteneur -->
+
+        [(#REM) Pied de page ]
+        <INCLURE{fond=inc-pied}>
+
+    </div><!-- fin page -->
+</body>
+</html>

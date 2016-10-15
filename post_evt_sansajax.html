@@ -1,0 +1,46 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html dir="#LANG_DIR" lang="#LANG">
+<head>
+<title>[(#NOM_SITE_SPIP|textebrut)]</title>
+[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+<INCLURE{fond=inc-head}>
+<link id="style_barreoutils" rel="stylesheet" href="[(#CHEMIN{formulaires/css/barreoutils.css}|direction_css)]" type="text/css" media="projection, screen, tv" />
+</head>
+
+<body class="page_sommaire tundra">
+<div id="page">
+
+	<INCLURE{fond=inc-entete}{self=#SELF}>
+
+	<div id="conteneur">
+
+		<div id="contenu" class="unecolonne">
+
+         <h2 class="titre-principal">Publier un événement</h2>
+
+         <B_avert>
+         <div class= "message-collectif">
+             <BOUCLE_avert(articles){id_article=#CONFIG{squig/avert_evt_id}}>
+             #TEXTE
+             </BOUCLE_avert>
+         </div>
+         </B_avert>
+
+      <BOUCLE_rubevt(rubriques){titre_mot=agenda}>
+
+	 <div class="noajax">
+	   #FORMULAIRE_PROPOSER_EVENEMENT{#ID_RUBRIQUE}
+	 </div>
+      </BOUCLE_rubevt>
+		
+		</div><!-- fin contenu -->
+	</div> <!-- fin conteneur -->
+
+   [(#REM) Pied de page ]
+   <INCLURE{fond=inc-pied}>
+
+</div><!-- fin page -->
+</body>
+</html>

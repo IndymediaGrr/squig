@@ -1,0 +1,6 @@
+#CACHE{5*60}
+<div class="calendrier calendrier-jour">
+<BOUCLE_jour(ARTICLES){id_rubrique=11}{agenda date_redac, jour, #ENV{annee}, #ENV{mois}, #ENV{jour}}{par date_redac}
+>[(#DATE_REDAC|squig_agenda_memo{#TITRE,[(#TITRE)], #URL_ARTICLE})]</BOUCLE_jour>[(#TOTAL_BOUCLE|squig_agenda_affiche{pas d'événement, 'jour'})][(#TOTAL_BOUCLE|?{' ',''})
+]<//B_jour>
+</div>

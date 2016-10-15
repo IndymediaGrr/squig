@@ -1,0 +1,32 @@
+#CACHE{5*60}
+#SET{dmenu1_id,#EVAL{isset($_COOKIE['dmenu1_id'])?$_COOKIE['dmenu1_id']:'dmenu1_tab1'}}
+<div id="menu_articles" class="menu">
+    <div class="menu-titre">
+        <div class="titre">Articles</div>
+        <div id="dmenu1" class="dmenu">
+            <a id="dmenu1_tab1" class="[(#GET{dmenu1_id}|=={dmenu1_tab1}|?{'on',''})]" href="#" onclick="return tabs_switch(this);">locaux</a>
+            <a id="dmenu1_tab2" class="[(#GET{dmenu1_id}|=={dmenu1_tab2}|?{'on',''})]" href="#" onclick="return tabs_switch(this);">non locaux</a>
+        </div>
+    </div>
+
+    <div id="submenu_articles" class="menu-contenu">
+        <div id="dl_articles" class="articles">
+            <div id="dmenu1_tab1_pan" style="display:[(#GET{dmenu1_id}|=={dmenu1_tab1}|?{'block','none'})]"
+                ><INCLURE{fond=inc-menu_articles_items}{portee='Infos locales'}
+                ></div>
+            <div id="dmenu1_tab2_pan" style="display:[(#GET{dmenu1_id}|=={dmenu1_tab2}|?{'block','none'})]"
+                ><INCLURE{fond=inc-menu_articles_items}{portee='Autres infos'}
+                ></div>
+        </div>
+    </div>
+</div>
+<div id="menu_articles2" class="menu last">
+    <div class="menu-titre">
+        <div class="titre long">Articles non modérés</div>
+    </div>
+    <div id="submenu_articles2" class="menu-contenu">
+        <div id="dl_articles2" class="articles"
+            ><INCLURE{fond=inc-menu_articles_items}{statut=prop}{astatut=#ARRAY{0,prop,1,accepte}}
+            ></div>
+</div>
+</div>  <!-- fin articles par dates  -->

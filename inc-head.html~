@@ -1,0 +1,85 @@
+#CACHE{5*60}
+[(#REM)
+	Entete standard de toutes les pages ; les elements specifiques
+	(title, description) figurent dans le squelette article.html
+]
+[(#REM) Preciser le charset ]
+<meta http-equiv="Content-Type" content="text/html; charset=#CHARSET" />
+
+[(#REM) Fierement fabrique avec SPIP ]
+[<meta name="generator" content="(#SPIP_VERSION)" />]
+
+<meta name="keywords" content="media, publication ouverte, openpublishing, independant, local, information" />
+
+[(#REM) Lien vers l'icone destinee a la barre de bookmarks ]
+[<link rel="shortcut icon" href="(#CHEMIN{favicon.ico})" />]
+
+[(#REM) Lien vers le flux RSS du site ]
+<link rel="alternate" type="application/rss+xml" href="[(#URL_MOT{1}|parametre_url{page,backend})]" title="Articles acceptés / locaux" />
+<link rel="alternate" type="application/rss+xml" href="[(#URL_RUBRIQUE{8}|parametre_url{page,backend})]" title="Éditos" />
+<link rel="alternate" type="application/rss+xml" href="[(#URL_MOT{54}|parametre_url{page,backend})]" title="Articles acceptés / non locaux" />
+<link rel="alternate" type="application/rss+xml" href="[(#URL_RUBRIQUE{4}|parametre_url{page,backend})]" title="Articles acceptés" />
+<link rel="alternate" type="application/rss+xml" href="[(#URL_RUBRIQUE{11}|parametre_url{page,backend})]" title="Événements acceptés" />
+[(#REM) Feuille de style par defaut pour le code genere par SPIP ]
+<link rel="stylesheet" href="[(#CHEMIN{spip_style.css}|direction_css)]" type="text/css" media="all" />
+
+
+
+
+<!--
+[(#REM) Feuille de style CSS pour l'affichage du site a l'ecran ]
+<link rel="stylesheet" href="[(#CHEMIN{habillage.css}|direction_css)]" type="text/css" media="projection, screen, tv" />
+
+[(#REM) Feuille de style CSS pour l'impression ]
+<link rel="stylesheet" href="[(#CHEMIN{impression.css}|direction_css)]" type="text/css" media="print" />
+-->
+
+[(#REM) Feuille de style CSS pour le site indymedia ]
+<link id="style_indy" rel="stylesheet" href="[(#CHEMIN{css/style_indy.css}|direction_css)]" type="text/css" media="projection, screen, tv" />
+<!--[if lte IE 6]>
+<link id="iewonderland" rel="stylesheet" href="[(#CHEMIN{css/iewonderland.css}|direction_css)]" type="text/css" media="projection, screen, tv" />
+<![endif]-->
+<script type="text/javascript" src="[(#CHEMIN{javascript/onglets.js})]"></script>
+<script type="text/javascript">
+<!--
+    startList = function() {
+        if (document.all&&document.getElementById) {
+            navRoot = document.getElementById("nav");
+            for (i=0; i<navRoot.childNodes.length; i++) {
+                node = navRoot.childNodes[i];
+                if (node.nodeName=="LI") {
+                    node.onmouseover=function() {
+                        this.className+=" over";
+                    }
+                    node.onmouseout=function() {
+                        this.className=this.className.replace(" over", "");
+                    }
+                }
+            }
+            nodes = new Array(
+
+                  "dmenu3",
+                  "dmenu1",
+"dmenu2"
+                  );
+            i=0;
+            for(node = nodes[i]; i < nodes.length; node = nodes[++i])
+            {
+                if (document.getElementById(node)) {
+                    nod = document.getElementById(node);
+                    nod.onmouseover=function() {
+                        this.className+=" over";
+                    }
+                    nod.onmouseout=function() {
+                        this.className=this.className.replace(" over", "");
+                    }
+                }
+            }
+        }
+    }
+window.onload=startList;
+
+//-->
+</script>
+[(#REM) Balise permettant aux plugins d'inserer des appels javascript ou css ]
+#INSERT_HEAD

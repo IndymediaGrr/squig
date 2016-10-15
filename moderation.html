@@ -1,0 +1,47 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html dir="#LANG_DIR" xmlns="http://www.w3.org/1999/xhtml" lang="#LANG">
+<head>
+<title>[(#NOM_SITE_SPIP|textebrut)]</title>
+[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+<INCLURE{fond=inc-head}>
+</head>
+
+<body class="page_sommaire">
+<div id="page">
+
+	<INCLURE{fond=inc-entete}{self=#SELF}>
+
+	<div id="conteneur">
+
+	<INCLURE{fond=menu}>
+
+   <div id="contenu">
+
+<?php if (autoriser('modifier','article'))
+     { ?>
+      <h2 class="titre-principal">Modération</h2>
+
+      <ul>
+         <li><a href="#URL_LOGOUT">Se déconnecter</a></li>
+         <li><a href="spip.php?page=modo_recap">Récapitulatif (articles, évenements, compléments d'information)</a></li>
+         <BOUCLE_edr(RUBRIQUES){titre=Editos}>
+         <li><a href="ecrire/?exec=naviguer&id_rubrique=#ID_RUBRIQUE">Gérer les éditos</a></li>
+         </BOUCLE_edr>
+         <li><a href="spip.php?page=modo_recherche">Rechercher à partir d'un mot clé</a></li>
+      </ul>
+
+<?php } ?>
+
+
+   </div><!-- fin contenu -->
+
+   </div> <!-- fin conteneur -->
+   
+   [(#REM) Pied de page ]
+	<INCLURE{fond=inc-pied}>
+   
+</div><!-- fin page -->
+</body>
+</html>

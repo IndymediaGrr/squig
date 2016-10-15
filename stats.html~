@@ -1,0 +1,48 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-force-https}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html dir="#LANG_DIR" lang="#LANG">
+<head>
+<title>[(#NOM_SITE_SPIP|textebrut)]</title>
+[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+<INCLURE{fond=inc-head}>
+</head>
+
+<body class="page_rubrique">
+<div id="page">
+
+	<INCLURE{fond=inc-entete}{self=#SELF}>
+
+	<div id="conteneur">
+
+		<INCLURE{fond=menu}>
+
+		<div id="contenu"  class="deuxcolonnes">
+
+<?php if ($auteur_session) { ?>
+
+<h2 class="titre-principal">Évolution des visites du site par jour</h2>
+
+<p>
+Chaque jour, les « visiteurs uniques » sont identifiés en fonction de leur adresse IP (ces informations ne sont pas conservées). Le résultat est une estimation relativement correcte du nombre de visiteurs du site, et non des simples « hits » ou des « pages vues » ; un visiteur qui visite plusieurs fois la même page est bien compté pour un unique « visiteur unique ».
+</p>
+
+<object data='./ecrire/?exec=statistiques_svg&amp;id_article=0&amp;aff_jours=105' width='450' height='310' type='image/svg+xml'><embed src='./ecrire/?exec=statistiques_svg&amp;id_article=0&amp;aff_jours=105' width='450' height='310' type='image/svg+xml' /></object>
+
+<?php } else { ?>
+
+<INCLURE{fond=inc-modo_reserve}>
+
+<?php } ?>
+
+     
+			<br class="nettoyeur" />
+		</div><!-- fin contenu -->
+		[(#REM) Pied de page ]
+		<INCLURE{fond=inc-pied}>
+		<br class="nettoyeur" />
+	</div> <!-- fin conteneur -->
+</div><!-- fin page -->
+</body>
+</html>
+

@@ -1,0 +1,30 @@
+#CACHE{5*60}
+#SET{statut,#ENV*{statut,'publie'}}
+#SET{astatut,#ENV*{astatut,#GET{statut}}}
+
+<BOUCLE_evenements(RUBRIQUES) {titre_mot=agenda}>
+<B_evenementsjour>
+<dl class="agenda">
+   <BOUCLE_evenementsjour(ARTICLES){id_rubrique}{statut IN #GET{astatut}}{pagination 14}{par date_redac}{age_redac<=0}>
+   [<dt class="date">[(#DATE_REDAC|nom_jour)] (#DATE_REDAC|affdate{'Y-m-d'}|unique{menu_agenda}|jour) [(#DATE_REDAC|nom_mois)]</dt>]
+   <dd class="item #EXPOSE">
+   <div class="contenu">
+      [(#DATE_REDAC|secondes|!={05}|?{<span class="horaire">[(#DATE_REDAC|heures)]h[(#DATE_REDAC|minutes)] : </span>,})]
+      <a href="#URL_ARTICLE"><span class="titre">[(#TITRE|couper{100})]</span></a>
+   </div>
+   </dd>
+   </BOUCLE_evenementsjour>    
+</dl>
+
+[(#TOTAL_BOUCLE|<{#GRAND_TOTAL}|?{
+<div class="toAgenda">[<a href="(#URL_RUBRIQUE{11}|parametre_url{statut,#GET{statut}})">la suite</a>] |
+    <a href="spip.php?page=agenda">le calendrier</a>
+    </div>
+})]
+
+</B_evenementsjour>
+<p>Aucun</p>
+<//B_evenementsjour>
+
+</BOUCLE_evenements>
+

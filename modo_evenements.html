@@ -1,0 +1,79 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html dir="#LANG_DIR" lang="#LANG">
+   <head>
+      <title>[(#NOM_SITE_SPIP|textebrut)]</title>
+      [<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+      <INCLURE{fond=inc-head}>
+      <meta name="robots" content="noindex,follow"/>
+   </head>
+
+   <body>
+      <div id="page">
+
+         <INCLURE{fond=inc-entete}{self=#SELF}>
+
+         <div id="conteneur">
+
+            <INCLURE{fond=menu}>
+
+            <div id="contenu">
+
+               <?php if (autoriser('ecrire')) { ?>
+
+
+               [(#ENV*{statut}|=={prop}|?{<h2 class="titre-principal">Évenements en attente de modération</h2>})]
+               [(#ENV*{statut}|=={refuse}|?{<h2 class="titre-principal">Événements refusés</h2>})]
+               [(#ENV*{statut}|=={debat}|?{<h2 class="titre-principal">Événements débatus</h2>})]
+               [(#ENV*{statut}|=={publie}|?{<h2 class="titre-principal">Événements acceptés</h2>})]
+               [(#ENV*{statut}|=={poubelle}|?{<h2 class="titre-principal">Événements corbeillés</h2>})]
+
+
+
+               [(#REM) Cette boucle affiche la liste des contributions en fonction du statut des articles de SPIP]
+		#SET{statut_a,(#ENV**{statut}|=={'prop'}|?{#ARRAY{0,accepte,1,prop},#ENV*{statut}})}
+
+               <BOUCLE_evenements(RUBRIQUES) {titre_mot=agenda}>
+
+               <B_article>
+               [(#ANCRE_PAGINATION)]
+
+               <div class="liste-evenements">
+                  <div class="pagination">#PAGINATION{page_precedent_suivant}</div>
+
+                  <dl>
+                     <BOUCLE_article(ARTICLES) {branche} {statut IN #GET{statut_a}} {par date_redac} {pagination 15}> 
+                     [<dt class="date">[(#DATE_REDAC|nom_jour)] (#DATE_REDAC|affdate{'Y-m-d'}|unique{liste_evt}|jour) [(#DATE_REDAC|nom_mois)] [(#DATE_REDAC|annee)]</dt>]
+                     <dd>
+                     <INCLURE{fond=inc-liste-evenement} {id_article} {statut}>
+                     </dd>
+                     </BOUCLE_article>
+                  </dl>
+
+                  <div class="pagination">#PAGINATION{page_precedent_suivant}</div>
+               </div>
+               </B_article>
+               <p>Aucun.</p>
+               <//B_article>
+               </BOUCLE_evenements>
+
+               <?php } else { ?>
+
+               <INCLURE{fond=inc-modo_reserve}>
+
+               <?php } ?>
+
+               <br class="nettoyeur" />
+
+            </div><!-- fin contenu -->
+
+         </div> <!-- fin conteneur -->
+
+         [(#REM) Pied de page ]
+         <INCLURE{fond=inc-pied}{skel=#SQUELETTE}>
+
+      </div><!-- fin page -->
+   </body>
+</html>
+

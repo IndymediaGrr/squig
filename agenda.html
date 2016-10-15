@@ -1,0 +1,39 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="#LANG_DIR" lang="#LANG">
+	<head>
+		<title>[(#NOM_SITE_SPIP|textebrut)]</title>
+		[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+		<INCLURE{fond=inc-head}>
+
+		<link rel="stylesheet" href="[(#CHEMIN{css/agenda.css})]" type="text/css" media="all" />
+		<script type="text/javascript" src="#EVAL{_DIR_JAVASCRIPT}layer.js"> </script> 
+		<script type="text/javascript" src="#EVAL{_DIR_JAVASCRIPT}presentation.js"> </script> 
+
+	</head>
+
+	<body  class="page_agenda">
+		<div id="page">
+			<INCLURE{fond=inc-entete}{self=#SELF}>
+
+			<div id="conteneur">
+
+				<div id="contenu" class="deuxcolonnes">
+
+					<h2 class="titre-principal titre">Calendrier</h2>
+
+					[(#ENV{type, mois}|agenda_connu)<INCLURE {fond=agenda_#ENV{type,mois}} {type} {delais=900} {annee} {mois} {jour} {echelle} {partie_cal} {theme}>]
+
+					<br class="nettoyeur" />
+
+				</div><!-- fin contenu -->
+
+			</div> <!-- fin conteneur -->
+
+			[(#REM) Pied de page ]
+			<INCLURE{fond=inc-pied}{skel=#SQUELETTE}>
+
+		</div><!-- fin page -->
+	</body>
+</html>

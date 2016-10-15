@@ -1,0 +1,39 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html dir="#LANG_DIR" lang="#LANG">
+<head>
+<title>[(#NOM_SITE_SPIP|textebrut)]</title>
+[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+<INCLURE{fond=inc-head}>
+</head>
+
+<body>
+<div id="page">
+
+	<INCLURE{fond=inc-entete}{self=#SELF}>
+
+	<div id="conteneur">
+
+		<INCLURE{fond=menu}>
+
+		<div id="contenu"  class="deuxcolonnes">
+
+			<h2 class="titre-principal">Ressource introuvable (dit « erreur 404 »)</h2>
+
+         <p>La ressource demandée n'existe pas.</p>
+         <ul>
+            <li>Si vous venez d'un autre site, il est fort probable que le lien soit erroné et nous n'y pouvons pas grand chose.</li>
+            <li>Si vous avez suivi un lien interne, ce doit être une erreur de notre part : informez-nous en !</li>
+         </ul>
+         <p>Dans le cas où vous chercheriez quelque chose de précis, il est possible d'effectuer des <a href="spip.php?page=recherche">recherches par mot(s) clé(s)</a></p>
+			<br class="nettoyeur" />
+      </div><!-- fin contenu -->
+   </div> <!-- fin conteneur -->
+   
+   [(#REM) Pied de page ]
+   <INCLURE{fond=inc-pied}>
+
+</div><!-- fin page -->
+</body>
+</html>

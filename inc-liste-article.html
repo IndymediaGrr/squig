@@ -1,0 +1,8 @@
+#CACHE{5*60}
+<BOUCLE_incarticle(ARTICLES) {id_article} {statut}>
+<a href="#URL_ARTICLE">
+    <span class="titre">#TITRE</span>
+    <span class="date">[(#DATE|nom_jour)] [(#DATE|jour)] [(#DATE|nom_mois)] [(#DATE|annee)]</span>
+    <span class="auteurE">par <BOUCLE_auteur(AUTEURS){id_article}>#NOM</BOUCLE_auteur>anonyme<//B_auteur></span>
+</a>
+</BOUCLE_incarticle>

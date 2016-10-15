@@ -1,0 +1,244 @@
+#CACHE{5*60}
+<INCLURE{fond=inc-dans-tous-les-squelettes}>
+<BOUCLE_article(ARTICLES) {id_article} {statut IN debat,prop,publie,refuse,accepte,poubelle}>
+<BOUCLE_poubs(ARTICLES) {id_article} {statut IN poubelle}>
+<?php
+
+include_spip("inc/autoriser");
+if( ! autoriser('ecrire') )
+{ 
+header('Location: ./');
+exit();
+} ?>
+</BOUCLE_poubs>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="#LANG_DIR" lang="#LANG">
+	<head>
+            <title>[(#TITRE|textebrut)] - [(#NOM_SITE_SPIP|textebrut)]</title>
+		[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|couper{150}|textebrut)" />]
+		<INCLURE{fond=inc-head}>
+        
+                <INCLURE{fond=inc-head_robots} {id_article} {statut}>
+
+	</head>
+	<body>
+		<div id="page">
+			<INCLURE{fond=inc-entete}{self=#SELF}>
+
+			<div id="conteneur">
+
+				<INCLURE{fond=menu}>
+
+				<div id="contenu" class="deuxcolonnes">
+
+					<div class="article">
+
+
+						[(#REM) cartouche]
+						<div class="cartouche">
+
+							<h2 class="titre-principal titre">#TITRE</h2>
+
+							<p class="date-auteur">
+								<span class="date">[(#DATE|nom_jour)] [(#DATE|jour)] [(#DATE|nom_mois)] [(#DATE|annee)]</span>
+								<B_auteur>
+                        <span class="auteurE"><BOUCLE_auteur(AUTEURS){id_article}>[par (#NOM|sinon{"anonyme"}) [&lt;(#EMAIL|replace{@,' (a) '})&gt;]]</BOUCLE_auteur></span>
+                        </B_auteur>
+                        <span class="auteurE">par anonyme</span>
+                        <//B_auteur>
+							</p>
+						  <span class="themes"><BOUCLE_themes_article(MOTS){id_article}>[<a href="#URL_MOT">#TITRE</a>] </BOUCLE_themes_article>
+</span>
+						  
+
+                  </div><!-- fin cartouche -->
+						
+
+						[(#REM) bloc de modération]
+						<div class="moderation">
+
+
+
+							<BOUCLE_div_prop(ARTICLES) {id_article} {statut="prop"}>
+							<div class="attention prop">
+								<p class="attention-titre">Cet article n'a pas été modéré.</p>
+							</BOUCLE_div_prop>
+							<BOUCLE_div_accepte(ARTICLES) {id_article} {statut="accepte"}>
+							<div class="attention accepte">
+								<p class="attention-titre">Cet article a été accepté par une seule modérateureuse.</p> 
+							</BOUCLE_div_accepte>
+							<BOUCLE_div_debat(ARTICLES) {id_article} {statut="debat"}>
+							<div class="attention debat">
+								<p class="attention-titre">Cet article est débattu :</p>
+							</BOUCLE_div_debat>
+							<BOUCLE_div_refuse(ARTICLES) {id_article} {statut="refuse"}>
+							<div class="attention refuse">
+								<p class="attention-titre">Cet article est refusé :</p>
+							</BOUCLE_div_refuse>
+							<BOUCLE_div_poubelle(ARTICLES) {id_article} {statut="poubelle"}>
+							<div class="attention poubelle">
+								<p class="attention-titre">Cet article est à la corbeille :</p>
+							</BOUCLE_div_poubelle>
+
+
+<?php 
+if (autoriser('ecrire'))  {
+							  ?>
+
+                     <BOUCLE_div_publie(ARTICLES) {id_article} {statut=publie}>
+                     <div class="attention publie">
+                     	<p class="attention-titre">Cet article est accepté</p>
+                     </BOUCLE_div_publie>
+                        <p class="idart">Identifiant : #ID_ARTICLE</p>
+
+[(#MODE_CONTRIB{'article'})]
+      
+                     <BOUCLE_div_publiefin(ARTICLES) {id_article} {statut=publie}>
+                     </div>
+                     </BOUCLE_div_publiefin>
+
+<?php } else { ?>
+
+							<BOUCLE_div_comm(ARTICLES) {id_article} {statut IN prop,accepte,debat,refuse,poubelle}>
+		    
+							[<div class="#EDIT{chapo} attention-commentaire">(#CHAPO)</div>]
+							</BOUCLE_div_comm>
+<?php } ?>
+							<BOUCLE_div_findiv(ARTICLES) {id_article} {statut IN prop,accepte,debat,refuse,poubelle}>
+							</div>
+							</BOUCLE_div_findiv>
+
+                  </div><!-- fin modération -->
+
+
+						[(#REM) texte de l'article]
+						[<div class="texte">(#TEXTE|image_reduire{400,0})</div>]
+                  [<div class="notes">(#NOTES)</div>]
+
+                  <br class="nettoyeur" />
+
+                  [(#REM) Autres documents joints a l'article ]
+                  <B_documents_joints>
+                  <div id="documents_joints">
+                     <h3><:titre_documents_joints:></h3>
+                     <ul>
+                        <BOUCLE_documents_joints(DOCUMENTS) {id_article} {par num titre, date} {doublons}>
+                        <li>
+                        <div class="spip_doc_titre"><a href="#URL_DOCUMENT" title="<:bouton_telecharger:>" type="#MIME_TYPE">[(#FICHIER|basename|sinon{<:info_document:>})]</a> <small>(#TYPE_DOCUMENT[ - (#TAILLE|taille_en_octets)])</small></div>
+                        [<div class="spip_doc_descriptif">(#DESCRIPTIF)</div>]
+                        </li>
+                        </BOUCLE_documents_joints>
+                     </ul>
+                  </div>
+                  </B_documents_joints>
+                  <br class="nettoyeur" />
+
+
+					</div><!-- fin article -->
+
+
+					[(#PARAMETRES_FORUM|?) Cette balise (invisible) provoque le recalcul du forum la premiere fois qu'un message est poste (cf. inc/invalideur). ]
+					<div class="complements">
+						<B_complement>
+						<div class="complements-titre">Compléments d'informations :</div>
+						<BOUCLE_complement(FORUMS){id_article}{par date}{statut IN prop,refuse,publie,debat,poubelle}>
+
+<?php
+
+if (autoriser('ecrire'))
+						{ ?>
+
+						<div class="complement #STATUT">
+
+							<div class="cartouche">
+								<div class="titre"><a name="forum#_complement:ID_FORUM"></a>#_complement:TITRE </div>
+                        [<div class="auteur">par (#_complement:AUTEUR|sinon{anonyme}), </div>]
+								[<div class="date">le (#DATE|affdate_jourcourt)</div>]
+
+							[(#MODE_COMMENTAIRE)]
+
+							</div>
+							[<div class="texte">(#_complement:TEXTE)</div>]
+						</div>
+
+<?php } else { ?>
+						<BOUCLE_complement_publiepub(FORUMS){id_forum}{statut=publie}>
+						<div class="complement publie">
+							<div class="cartouche">
+								<div class="titre">#_complement:TITRE </div>
+								[<div class="auteur">par (#_complement:AUTEUR|sinon{anonyme}), </div>]
+								[<div class="date">le (#DATE|affdate_jourcourt)</div>]
+							</div>
+							[<div class="texte">(#_complement:TEXTE)</div>]
+						</div>
+						</BOUCLE_complement_publiepub>
+
+
+<?php } ?>
+						</BOUCLE_complement>
+               </div><!-- fin complements -->
+
+					<BOUCLE_aj_comp(ARTICLES) {id_article} {statut IN prop,accepte,publie,debat}>
+               <p>[<strong><a href="spip.php?page=post_complement&amp;(#PARAMETRES_FORUM)">Ajouter un complément d'information</a></strong>]</p>	
+               </BOUCLE_aj_comp>
+
+               <div id="autres_articles">
+
+                  <BOUCLE_autresarticles(RUBRIQUES) {titre_mot=articles} {0,1}>
+                  
+                  #SET{t1, #ARRAY{0,#STATUT_ARTICLE}}
+                  #SET{t2,(#STATUT_ARTICLE|=={'prop'}|?{(#GET{t1}|array_merge{#ARRAY{1,accepte}}),#GET{t1}})}
+                  #SET{t3,(#STATUT_ARTICLE|=={'accepte'}|?{(#GET{t2}|array_merge{#ARRAY{1,prop}}),#GET{t2}})}
+
+                  <B_art>
+
+                  <BOUCLE_art_refuse(ARTICLES){id_article}{statut=refuse}>
+                  <h2>Les autres articles refusés</h2>
+                  </BOUCLE_art_refuse>
+
+                  <BOUCLE_art_prop(ARTICLES){id_article}{statut IN prop, accepte}>
+                  <h2>Les autres articles en attente de modération</h2>
+                  </BOUCLE_art_prop>
+
+                  <BOUCLE_art_debat(ARTICLES){id_article}{statut=debat}>
+                  <h2>Les autres articles en débat</h2>
+                  </BOUCLE_art_debat>
+
+                  #ANCRE_PAGINATION
+
+
+                  <div class="pagination">#PAGINATION{page_precedent_suivant}</div>
+
+                 <div class="liste-articles">
+                     <ul>
+                        <BOUCLE_art(ARTICLES) {branche} {par date} {inverse} {exclus} {statut IN #GET{t3}} {statut IN prop,accepte,refuse,debat,poubelle} {pagination 20}>
+                        <li>
+                        <a href="#URL_ARTICLE">
+                           <span class="titre">#TITRE</span>
+                           <span class="date">[(#DATE|nom_jour)] [(#DATE|jour)] [(#DATE|nom_mois)] [(#DATE|annee)]</span>
+                           <B_art_auteur><span class="auteurE">par <BOUCLE_art_auteur(AUTEURS){id_article}>#NOM</BOUCLE_art_auteur></span></B_art_auteur>
+                        </a>
+                        </li>
+                        </BOUCLE_art>
+                     </ul>
+                     <div class="pagination">#PAGINATION{page_precedent_suivant}</div>
+                  </div>
+                  </B_art>
+                  <//B_art>
+
+                  </BOUCLE_autresarticles>
+               </div>
+
+					<br class="nettoyeur" />
+
+				</div><!-- fin contenu -->
+
+         </div> <!-- fin conteneur -->
+
+			[(#REM) Pied de page ]
+			<INCLURE{fond=inc-pied}{skel=#SQUELETTE}>
+
+		</div><!-- fin page -->
+	</body>
+</html>
+</BOUCLE_article>

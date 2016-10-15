@@ -1,0 +1,31 @@
+<!-- descriptif=
+<h4>
+Ici vous pouvez configurer le plugin squig.
+</h4>
+-->
+
+<!-- titre=Squig-->
+
+#CACHE{0}
+
+<form method="post" action="#SELF">[<div>(#ENV{_cfg_}|form_hidden)</div>]
+
+    <fieldset><legend>Avertissements avant publication</legend>
+        <p>Il est possible d'utiliser le contenu d'un article comme avertissement avant les formulaires de publication :</p>
+        <ul>
+            <li>article <input type="text" name="avert_art_id" value="[(#CONFIG{squig/avert_art_id})]" size="6" class="fondl" /></li>
+            <li>événement <input type="text" name="avert_evt_id" value="[(#CONFIG{squig/avert_evt_id})]" size="6" class="fondl" /> </li>
+            <li>complément d'information <input type="text" name="avert_cmp_id" value="[(#CONFIG{squig/avert_cmp_id})]" size="6" class="fondl" /></li>
+        </ul>
+        <p>(numéro de l'article, 0 ou vide = aucun)</p>
+    </fieldset>
+
+    
+
+    <div>
+        <input type="submit" name="_cfg_ok" value="<:oK:>" class="fondo" />
+        <input type="reset" value="<:reset:>" class="fondo" />
+        <input type="submit" name="_cfg_delete" value="<:supprimer:>" class="fondo" />
+    </div>
+</form>
+

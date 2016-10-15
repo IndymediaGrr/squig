@@ -1,0 +1,14 @@
+#CACHE{5*60}
+<B_infos>
+<div id="infosig"> 
+<fieldset>
+  <BOUCLE_infos(ARTICLES){titre_mot=info_ig}>
+  <legend>
+  <span class="titre">#TITRE</span>
+  [<span class="date"> - [(#DATE|nom_jour)] [(#DATE|jour)] [(#DATE|nom_mois)] (#DATE|annee)</span>]</legend>
+  <span class="info">#TEXTE</span>
+
+	</BOUCLE_infos>
+
+</div>
+</B_infos>

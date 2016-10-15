@@ -1,0 +1,74 @@
+#CACHE{5*60}
+<?php
+//if( $auteur_session) {
+include_spip("inc/autoriser");
+if (autoriser('modifier','article')) {
+?>
+
+#SET{dmenu3_id,#EVAL{(isset($_COOKIE['dmenu3_id']) && $_COOKIE['dmenu3_id'])?$_COOKIE['dmenu3_id']:'dmenu3_tab1'}}
+<div id="menu_moderation" class="menu">
+   <div class="menu-titre">
+      <div class="titre">Modération</div>
+      <div id="dmenu3" class="dmenu">
+         <BOUCLE_tab_rubart(RUBRIQUES){titre_mot=articles}{0,1}>
+         <BOUCLE_tab_articles(ARTICLES){id_rubrique} {statut IN prop,accepte,debat} {par date} {inverse}></BOUCLE_tab_articles>
+         [<a id="dmenu3_tab1" class="[(#GET{dmenu3_id}|=={dmenu3_tab1}|?{'on',''})]" href="#" onclick="return tabs_switch(this);">(#TOTAL_BOUCLE) article[(#TOTAL_BOUCLE|<={1}|?{'','s'})]</a>]
+         <//B_tab_articles>
+         </BOUCLE_tab_rubart>
+         <BOUCLE_tab_rubevt(RUBRIQUES){titre_mot=agenda}{0,1}>
+         <BOUCLE_tab_evenements(ARTICLES){id_rubrique} {statut IN prop,accepte,debat} {par date} {inverse}></BOUCLE_tab_evenements>
+         [<a id="dmenu3_tab2" class="[(#GET{dmenu3_id}|=={dmenu3_tab2}|?{'on',''})]" href="#" onclick="return tabs_switch(this);">(#TOTAL_BOUCLE) évenement[(#TOTAL_BOUCLE|<={1}|?{'','s'})]</a>]
+         <//B_tab_evenements>
+         </BOUCLE_tab_rubevt>
+         <BOUCLE_tab_complements(FORUMS){statut IN prop,debat}{par date}{inverse}></BOUCLE_tab_complements>
+         [<a id="dmenu3_tab3" class="[(#GET{dmenu3_id}|=={dmenu3_tab3}|?{'on',''})]" href="#" onclick="return tabs_switch(this);">(#TOTAL_BOUCLE) complément[(#TOTAL_BOUCLE|<={1}|?{'','s'})]</a>]
+         <//B_tab_complements>
+      </div>
+   </div>
+   <div class="menu-contenu">
+      <div id="dmenu3_tab1_pan" style="display:[(#GET{dmenu3_id}|=={dmenu3_tab1}|?{'block','none'})]" class="articles">
+         <BOUCLE_rubart(RUBRIQUES){titre_mot=articles}{0,1}>
+         <BOUCLE_articles(ARTICLES){id_rubrique} {statut IN prop,accepte,debat} {par date} {inverse}>
+            <img src="#CHEMIN{images/puce-#STATUT.png}" alt="puce"/>
+            <a class="item #EXPOSE" href="#URL_ARTICLE" [title="(#CHAPO|attribut_html)"]>
+               <span class="titre">[(#TITRE)]</span><br/>
+               <span class="horaire">[(#DATE|date_relative{43200}|sinon{le #DATE|affdate{'d/m/y'}})]</span
+                  ><span class="auteurE">, par <BOUCLE_auteur_art(auteurs){id_article}>#NOM</BOUCLE_auteur_art>anonyme<//B_auteur_art></span>[<span class="mode"><br/>(#MODE_PARQUI)</span>]
+            </a>
+         </BOUCLE_articles>
+         </B_articles>
+         <p>Aucun</p>
+         <//B_articles>
+         </BOUCLE_rubart>
+      </div>
+      <div id="dmenu3_tab2_pan" style="display:[(#GET{dmenu3_id}|=={dmenu3_tab2}|?{'block','none'})]" class="agenda">
+         <BOUCLE_rubevt(RUBRIQUES){titre_mot=agenda}{0,1}>
+         <BOUCLE_evenements(ARTICLES){id_rubrique} {statut IN prop,accepte,debat} {par date} {inverse}>
+            <img src="#CHEMIN{images/puce-#STATUT.png}" alt="puce"/>
+            <a class="item #EXPOSE" href="#URL_ARTICLE" [title="(#CHAPO|attribut_html)"]>
+               <span class="titre">[(#TITRE)]</span><br/>
+               <span class="horaire">[(#DATE|date_relative{43200}|sinon{le #DATE|affdate{'d/m/y'}})]</span
+                  ><span class="auteurE">, par <BOUCLE_auteur_evt(auteurs){id_article}>#NOM</BOUCLE_auteur_evt>anonyme<//B_auteur_evt></span>[<span class="mode"><br/>(#MODE_PARQUI)</span>]
+            </a>
+         </BOUCLE_evenements>
+         </B_evenements>
+         <p>Aucun</p>
+         <//B_evenements>
+         </BOUCLE_rubevt>
+      </div>
+      <div id="dmenu3_tab3_pan" style="display:[(#GET{dmenu3_id}|=={dmenu3_tab3}|?{'block','none'})]" class="forums">
+         <BOUCLE_complements(FORUMS){statut IN prop,debat}{par date}{inverse}>
+         <img src="#CHEMIN{images/puce-#STATUT.png}" alt="puce"/>
+ 			<a href="#URL_FORUM" class="item">
+            <span class="titre">#TITRE</span><br/>
+            <span class="auteurE">[(#DATE|nom_jour)] [(#DATE|jour)] [(#DATE|nom_mois)] [(#DATE|annee)][ par (#NOM|sinon{anonyme})]</span>
+            <BOUCLE_cart(ARTICLES){id_article=#ID_ARTICLE}{statut IN debat,prop,publie,refuse,accepte}>[<span class="mode"><br/>(#MODE_PARQUI)</span>][<br/>Article: <span class="titre-article">(#TITRE|!={#_complements:TITRE}|?{#TITRE})</span>]</BOUCLE_cart>
+				</a>
+         </BOUCLE_complements>    
+      </div>
+   </div>
+</div>
+
+<?php }
+?>
+

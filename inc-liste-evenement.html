@@ -1,0 +1,8 @@
+#CACHE{5*60}
+<BOUCLE_incevenement(ARTICLES) {id_article} {statut}>  
+<a href="#URL_ARTICLE">
+    <span class="titre">#TITRE</span><B_auteur><span class="auteurE"><BOUCLE_auteur(AUTEURS){id_article}>[, par (#NOM|sinon{"anonyme"})]</BOUCLE_auteur></span></B_auteur><span class="auteurE">, par anonyme</span><//B_auteur>
+    <br/>
+    <span class="date">[(#DATE_REDAC|secondes|!={05}|?{[(#DATE_REDAC|heures)]:[(#DATE_REDAC|minutes)],toute la journée})]</span> [ - <span class="lieu">(#SURTITRE)</span>]
+</a>
+</BOUCLE_incevenement>

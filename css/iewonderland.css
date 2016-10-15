@@ -1,0 +1,35 @@
+
+
+a,li,img,div { behavior: url(win_png.htc); }
+
+#contenu
+{
+	height:1%;
+}
+
+#page
+{
+	width:70em;
+	width:expression(document.body.clientWidth < 60 ? "60em" : document.body.clientWidth > 85 ? "85em" : "100%"); /* Pour IE<IE7 */
+}
+
+.edito #first.cartouche 
+{
+    margin-top:70px;
+}
+
+.titre-principal {
+    margin-top:70px;
+}
+
+form.openpublishing fieldset {
+    position:relative;
+    top:1em;
+    padding: 0em 0em 1em 0.5em;
+}
+form.openpublishing fieldset legend {
+    position:relative;
+    top:-1em;
+    padding:0.4em;
+    color:black;
+}

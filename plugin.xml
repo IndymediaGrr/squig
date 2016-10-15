@@ -1,0 +1,17 @@
+<plugin>
+	<nom>squig</nom>
+	<auteur>	<!-- Auteur du plugin -->
+  Bob
+_ &copy; 2007 - Licence GPL
+	</auteur>
+	<version>3.1.0</version>
+	<etat>test</etat>
+	<description>
+	<multi>
+  Test
+	</multi>
+	</description>
+	<prefix>squig</prefix>
+	<options>squig_options.php</options>
+	<fonctions>squig_agenda.php</fonctions>
+</plugin>

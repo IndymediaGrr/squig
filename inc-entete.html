@@ -1,0 +1,11 @@
+#CACHE{5*60}
+   <INCLURE{fond=menu_h}{self=#ENV{self}}>
+	<div id="haut">
+		<a id="bandeau_clic" href="/"><span>#NOM_SITE_SPIP</span></a>
+		<div id="bandeau">#LOGO_SITE_SPIP</div>
+      <BOUCLE_bandeau(ARTICLES) {titre_mot='bandeau-en-cours'}{par hasard}{0,1}>
+ 		<div id="bandeau_image" [style="background-image:url(IMG/(#LOGO_ARTICLE|fichier))"]></div>         
+      </BOUCLE_bandeau>
+ 		<div id="bandeau_image"></div>         
+      <//B_bandeau>
+  </div><!-- haut -->

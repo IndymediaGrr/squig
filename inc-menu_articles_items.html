@@ -1,0 +1,24 @@
+#CACHE{5*60}
+#SET{portee,#ENV*{portee,''}}
+#SET{statut,#ENV*{statut,'publie'}}
+#SET{astatut,#ENV*{astatut,#GET{statut}}}
+#SET{aportee,#ENV*{aportee,#ENV*{portee,#ARRAY{0,'Infos locales',1,'Autres infos'}}}}
+
+<BOUCLE_articles(RUBRIQUES){titre_mot=articles}{0,1}>
+<BOUCLE_articlesjourglobal(ARTICLES){id_rubrique} {statut IN #GET{astatut}} {titre_mot IN #GET{aportee}} {par date} {inverse} {0,10}>
+   <a class="item #EXPOSE" href="#URL_ARTICLE">
+      <span class="titre">[(#TITRE)]</span><br/>
+      <span class="horaire">[(#DATE|date_relative{43200}|sinon{le #DATE|affdate{'d/m/y'}})]</span
+      ><span class="auteurE">, par <BOUCLE_auteur_b(auteurs){id_article}>#NOM</BOUCLE_auteur_b>anonyme<//B_auteur_b></span>
+   </a>
+</BOUCLE_articlesjourglobal>
+[(#TOTAL_BOUCLE|=={10}|?{
+<div class="toArticles">
+   [<a href="(#URL_RUBRIQUE{4}|parametre_url{statut,#GET{statut}}|parametre_url{portee,#GET{portee}})">la suite...</a>]
+</div>
+})]
+
+</B_articlesjourglobal>
+   <p>Aucun</p>
+<//B_articlesjourglobal>
+</BOUCLE_articles>

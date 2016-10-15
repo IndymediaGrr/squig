@@ -1,0 +1,136 @@
+#CACHE{5*60}
+
+<div id="menuh" >
+
+    <ul id="nav">
+
+
+        <li id="menu_recherche" class="last">
+        <a class="titre_rubrique" href="spip.php?page=recherche">Rechercher</a>
+        <ul>
+           <li>#FORMULAIRE_RECHERCHE</li>
+           <li class="last"></li>
+        </ul>
+        </li>
+        <li id="menu4"> 
+        <a class="titre_rubrique" href="#URL_RUBRIQUE{11}">Événements</a>
+        <ul id="smenu4">
+           <li><a href="spip.php?page=agenda&amp;type=mois[&amp;annee=(#DATE|annee)][&amp;mois=(#DATE|mois)&amp;jour=01]">Le calendrier</a></li>
+           <li class="important"><div>Par statut</div></li>
+           <li><a href="[(#URL_RUBRIQUE{11}|parametre_url{statut,publie})]">acceptés</a></li>
+           <li><a href="[(#URL_RUBRIQUE{11}|parametre_url{statut,prop})]">non modérés</a></li>
+           <li><a href="[(#URL_RUBRIQUE{11}|parametre_url{statut,debat})]">débattus</a></li>
+           <li><a href="[(#URL_RUBRIQUE{11}|parametre_url{statut,refuse})]">refusés</a></li>
+           <?php
+	   if (autoriser('ecrire')) { ?>
+           <li><a href="[(#URL_RUBRIQUE{11}|parametre_url{statut,poubelle})]">corbeillés</a></li>
+           <?php } ?>
+           <li class="last"></li>
+        </ul>
+        </li>
+
+
+
+        <li id="menu5">
+        <a class="titre_rubrique" href="#URL_RUBRIQUE{4}">Articles</a>
+        <ul id="smenu5">
+           <li class="important"><div>Par statut</div></li>
+           <li><a href="[(#URL_RUBRIQUE{4}|parametre_url{statut,publie})]">acceptés</a></li>
+           <li><a href="[(#URL_RUBRIQUE{4}|parametre_url{statut,prop})]">non modérés</a></li>
+           <li><a href="[(#URL_RUBRIQUE{4}|parametre_url{statut,debat})]">débattus</a></li>
+           <li><a href="[(#URL_RUBRIQUE{4}|parametre_url{statut,refuse})]">refusés</a></li>
+           <?php if (autoriser('ecrire')) { ?>
+           <li><a href="[(#URL_RUBRIQUE{4}|parametre_url{statut,poubelle})]">corbeillés</a></li>
+           <?php } ?>
+           <li class="important"><div>Par thème</div></li>
+           <BOUCLE_sous_menu5(MOTS) {type=Themes}>
+           <li><a href="#URL_MOT">#TITRE</a></li>
+           </BOUCLE_sous_menu5>
+           <li class="last"></li>
+        </ul>
+        </li>
+
+
+
+        <BOUCLE_menu3(RUBRIQUES) {titre_mot=indymedia} >
+        <li id="menu2">
+        <a class="titre_rubrique" href="spip.php?page=indymedia">#TITRE</a> 
+        <ul id="smenu2">
+            <BOUCLE_sous_menu3(RUBRIQUES) {id_parent} {par num titre} {titre_mot=menu_h}>
+            <li class="important" ><div> [(#TITRE|supprimer_numero)]</div></li>
+            <BOUCLE_sous_menu_articles3(ARTICLES) {id_rubrique} {par num titre} >
+            <li><a href="#URL_ARTICLE">[(#TITRE|supprimer_numero)]</a></li>
+            </BOUCLE_sous_menu_articles3>
+            </BOUCLE_sous_menu3>
+            <li class="last"></li>
+        </ul>
+        </li>
+        </BOUCLE_menu3>
+
+
+        [(#REM) Pour accéder à l'open publishing. Pour l'instant, il n'y a pas de différences entre la publication d'un article et d'un événement]
+
+        <li id="menu3" class="first" style="width:9em">
+        <a class="titre_rubrique publiez" href="spip.php?page=post_pre"> <span>Publiez !</span></a> 
+        <ul id="smenu3">
+            <li><a href="spip.php?page=post_article">Un article</a></li>
+            <li><a href="spip.php?page=post_evt">Un &eacute;v&eacute;nement</a></li>
+            <li class="last"></li>
+        </ul>
+        </li>
+
+
+        #SET{menuttt,spip.php}
+        #SET{logouturl,(#GET{menuttt}|parametre_url{action,logout}|parametre_url{logout,public}|parametre_url{url,#ENV{self}})}
+        #SET{cleanlogouturl,(#GET{menuttt}|parametre_url{action,cookie}|parametre_url{cookie_admin,non}|parametre_url{url,#GET{logouturl}})}
+        #SET{cleanurl,(#GET{menuttt}|parametre_url{action,cookie}|parametre_url{cookie_admin,non}|parametre_url{url,'./'})}
+        #SET{changeurl,(#GET{menuttt}|parametre_url{action,cookie}|parametre_url{cookie_admin,non}|parametre_url{url,modo})}
+
+        <?php
+
+	include_spip("inc/autoriser");
+	if (!autoriser('ecrire') && isset($_COOKIE['spip_admin'])) { ?>
+        <li id="menu_modo_recap" class="first modo"><a class="titre_rubrique" href="spip.php?page=modo_recap">Modo</a>
+        <ul id="smenu_modo_recap">
+           <li><a href="spip.php?page=modo_recap">Récapitulatif de modération</a></li>
+           <li><a href="#GET{cleanurl}">Supprimer mes traces</a></li>
+           <!-- <li><a href="#GET{changeurl}">Changer de modérateureuse</a></li> -->
+           <li class="important"><div>Spip</div></li>
+           <li><a href="ecrire/">Accéder à l'interface</a></li>
+           <li><a href="[(#SELF|parametre_url{var_mode,calcul})]"><:admin_recalculer:></a></li>
+           <li class="last"></li>
+        </ul>
+        </li>
+        <?php } else if (autoriser('ecrire')) { ?>
+        <li id="menu_modo_login" class="modo"><a class="titre_rubrique" href="#"><?php echo ucwords(substr($_COOKIE['spip_admin'],1)); ?></a>
+        <ul id="smenu_modo_login">
+            <li><a href="#GET{cleanlogouturl}">Logout</a></li>
+            <li><a href="#GET{logouturl}">Logout (garde des traces)</a></li>
+            <li><a href="ecrire/?exec=auteurs">Modifier mon mot de passe</a></li>
+           <li class="last"></li>
+        </ul>
+        </li>
+
+
+        <BOUCLE_edr(RUBRIQUES){titre_mot=editos}{0,1}>
+        <li id="menu7" class="first modo"><a class="titre_rubrique" href="#">Vie du site</a>
+        <ul id="smenu7">
+           <li class="important"><div>Récapitulatif</div></li>
+           <li><a href="spip.php?page=modo_recap">Modération</a></li>
+           <li><a href="ecrire/?exec=naviguer&amp;id_rubrique=#ID_RUBRIQUE">Éditos</a></li>
+           <li class="important"><div>Statistiques</div></li>
+           <li><a href="spip.php?page=stats">Visites</a></li>
+           <li><a href="spip.php?page=modo_repartition">Contributions</a></li>
+           <li class="important"><div>Divers</div></li>
+           <li><a href="ecrire/">Accéder à SPIP</a></li>
+           <li><a href="[(#SELF|parametre_url{var_mode,calcul})]"><:admin_recalculer:></a></li>
+           <li class="last"></li>
+        </ul>
+        </li>
+        </BOUCLE_edr>
+        <?php } ?>
+
+
+    </ul>
+
+</div>
